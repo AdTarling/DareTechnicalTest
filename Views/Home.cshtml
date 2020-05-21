@@ -1,0 +1,16 @@
+﻿@using DareTechnicalTest.Constants
+@model DareTechnicalTest.Models.ViewModels.HomePageViewModel
+    <div class="text-center">
+        <h1>@Model.Header</h1>
+
+        <p>@Model.PageDescription</p>
+
+        <button type="button" class="btn btn-primary refresh-video-list">@Model.PlaylistRefreshButtonText</button>
+        
+        <div class="playlist-container">
+            @Html.Partial("_playListItems", Model.PlaylistVideos)
+
+        </div>
+
+
+    </div>

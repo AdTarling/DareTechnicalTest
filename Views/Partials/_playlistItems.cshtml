@@ -1,0 +1,16 @@
+﻿@model IList<DareTechnicalTest.Models.Media.Video.PlaylistItem>
+    
+@if (Model == null || !Model.Any())
+{
+    return;
+}
+ 
+@foreach (var playlistItem in Model)
+{
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        <div class="col-md-4">@playlistItem.PlaylistItemTitle</div>
+        <div class="col-md-4"><a href="@playlistItem.PlaylistItemVideoUrl" target="_blank">@playlistItem.PlaylistItemVideoUrl</a></div>
+        <div class="col-md-4">@playlistItem.PlaylistUploadDate</div>
+    </div>
+}
