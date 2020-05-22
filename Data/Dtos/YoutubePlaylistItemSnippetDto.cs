@@ -11,6 +11,9 @@ namespace DareTechnicalTest.Data.Dtos
         [JsonProperty("title")]
         public string Title { get; set; }
 
+        [JsonProperty("resourceId")]
+        public YoutubePlaylistItemSnippetResourceId ResourceId { get; set; }
+
         [JsonProperty("thumbnails")]
         public YoutubePlaylistItemSnippetThumbnailsDto Thumbnails { get; set; }
     }

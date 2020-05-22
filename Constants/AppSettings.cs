@@ -3,6 +3,7 @@
     public static class AppSettings
     {
         public const string DefaultPlaylist = "defaultPlaylist";
+        public const string YoutubeVideoUrlBase = "youtubeVideoUrlBase";
 
         public const string YoutubeApiKey = "youtubeApiKey";
         public const string YoutubeApiBaseUrl = "youtubeApiBaseUrl";

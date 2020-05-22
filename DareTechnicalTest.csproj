@@ -300,6 +300,7 @@
     <Compile Include="Data\Dtos\YoutubePlaylistDto.cs" />
     <Compile Include="Data\Dtos\YoutubePlaylistItemDto.cs" />
     <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetDto.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetResourceId.cs" />
     <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetThumbnailsDefaultDto.cs" />
     <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetThumbnailsDto.cs" />
     <Compile Include="Models\Media\MediaModel.cs" />

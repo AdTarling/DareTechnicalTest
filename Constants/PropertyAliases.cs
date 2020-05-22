@@ -12,7 +12,7 @@
         public static class PlaylistItem
         {
             public const string PlaylistItemTitle = "playlistItemTitle";
-            public const string PlaylistItemThumbnail = "playlistItemThumbnail";
+            public const string PlaylistItemThumbnailUrl = "playlistItemThumbnailUrl";
             public const string PlaylistItemVideoUrl = "playlistItemVideoUrl";
             public const string PlaylistUploadDate = "playlistUploadDate";
         }

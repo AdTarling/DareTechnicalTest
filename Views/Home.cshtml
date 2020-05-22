@@ -7,16 +7,17 @@
     <p>@Model.PageDescription</p>
 
     <button type="button" class="btn btn-primary refresh-video-list-btn">@Model.PlaylistRefreshButtonText</button>
+    
+    <br/>
+    <p><strong>Playlist Name: @Model.Playlist</strong></p>
 
     <div class="playlist-container">
-        @Html.Partial("_playListItems", Model.PlaylistVideos)
     </div>
 </div>
 
 <script type="text/javascript" src="../Js/HomePageController.js"></script>
 <script type="text/javascript">
     homePageController.initialize({
-        playlist: '@Model.Playlist',
-        numberOfPlaylistItems: '@Model.PlaylistVideos.Count'
+        playlist: '@Model.Playlist'
     });
 </script>

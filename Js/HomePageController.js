@@ -1,7 +1,6 @@
 ﻿(function (homePageController, $, undefined) {
     homePageController.initialize = function (options) {
         this.playlist = options.playlist;
-        this.numberOfPlaylistItems = options.numberOfPlaylistItems;
 
         this.homepageContainer = $(".homepage-container");
         this.refreshPlaylistButton = $(this.homepageContainer).find(".refresh-video-list-btn");
@@ -9,6 +8,9 @@
         this.refreshPlaylistUrl = "/umbraco/surface/playlist/SaveAndReturnPlaylistItems?playlist=" + this.playlist;
 
         this.registerRefreshButtonClick();
+
+        //initial list to retrieve
+        homePageController.getYoutubePlaylistAndSave();
     }
 
     homePageController.registerRefreshButtonClick = function() {
@@ -19,11 +21,9 @@
 
     homePageController.getYoutubePlaylistAndSave = function() {
         $.ajax({
-            url: this.refreshPlaylistUrl,
+            url: homePageController.refreshPlaylistUrl,
             success: function(data) {
-                if (console && console.log) {
-                    console.log(data);
-                }
+                $(homePageController.playlistContainer).html(data);
             },
             error: function(data) {
                 alert("Error Retrieving Refreshed Playlist!");
