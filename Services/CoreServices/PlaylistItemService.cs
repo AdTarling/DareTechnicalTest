@@ -106,9 +106,7 @@ namespace DareTechnicalTest.Services.CoreServices
             IContentService contentService)
         {
             var playlistContentInformation = GetPlaylistContentInformation(playlist);
-            if (playlistContentInformation.PlaylistItemsContent == null
-                || !playlistContentInformation.PlaylistItemsContent.Any()
-                || playlistContentInformation.PlaylistId <= default(int))
+            if (playlistContentInformation.PlaylistId <= default(int))
             {
                 return;
             }
