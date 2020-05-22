@@ -292,8 +292,16 @@
     <Compile Include="Constants\AppSettings.cs" />
     <Compile Include="Constants\DocumentTypes.cs" />
     <Compile Include="Constants\PropertyAliases.cs" />
+    <Compile Include="Controllers\Surface\PlaylistController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Data\Clients\Interfaces\IYoutubeApiClient.cs" />
+    <Compile Include="Data\Clients\YoutubeApiClient.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistDto.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistItemDto.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetDto.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetThumbnailsDefaultDto.cs" />
+    <Compile Include="Data\Dtos\YoutubePlaylistItemSnippetThumbnailsDto.cs" />
     <Compile Include="Models\Media\MediaModel.cs" />
     <Compile Include="Models\Media\Video\PlaylistItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -331,7 +339,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Partials\_playlistItems.cshtml" />
+    <Content Include="Views\Shared\_playlistItems.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
