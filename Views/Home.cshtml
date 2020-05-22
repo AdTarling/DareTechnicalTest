@@ -1,16 +1,33 @@
-﻿@using DareTechnicalTest.Constants
-@model DareTechnicalTest.Models.ViewModels.HomePageViewModel
-    <div class="text-center">
-        <h1>@Model.Header</h1>
+﻿@model DareTechnicalTest.Models.ViewModels.HomePageViewModel
 
-        <p>@Model.PageDescription</p>
+@{
+    var playlistItemCount = Model.PlaylistVideos?.Count ?? 0;
+}
 
-        <button type="button" class="btn btn-primary refresh-video-list">@Model.PlaylistRefreshButtonText</button>
-        
-        <div class="playlist-container">
-            @Html.Partial("_playListItems", Model.PlaylistVideos)
+<div class="homepage-container text-center">
+    <h1>@Model.Header</h1>
 
-        </div>
+    <p>@Model.PageDescription</p>
 
+    <button type="button" class="btn btn-primary refresh-video-list-btn">@Model.PlaylistRefreshButtonText</button>
+    
+    <br/>
+    <p class="mt-4"><strong>Playlist Name: @Model.Playlist</strong></p>
+    <hr/>
 
+    <div class="playlist-container">
+        @if (Model.PlaylistVideos != null && Model.PlaylistVideos.Any())
+        {
+            @Html.Partial("_playlistItems", Model.PlaylistVideos)
+        }
     </div>
+</div>
+
+<script type="text/javascript" src="../Js/HomePageController.js"></script>
+<script type="text/javascript">
+    homePageController.initialize({
+        playlist: '@Model.Playlist',
+        playlistItemCount: '@playlistItemCount',
+        spinnerHtml: '@Html.Raw(Html.Partial("_spinner"))'
+    });
+</script>
