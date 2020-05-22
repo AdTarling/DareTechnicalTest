@@ -39,6 +39,8 @@ namespace DareTechnicalTest.Services.PageServices
             }
 
             viewModel.Playlist = playlist;
+            viewModel.PlaylistVideos = _playlistItemService.GetPublishedPlaylistItems(pageContent, playlist);
+
             return viewModel;
         }
     }

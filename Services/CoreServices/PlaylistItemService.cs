@@ -5,13 +5,12 @@ using System.Linq;
 using DareTechnicalTest.Constants;
 using DareTechnicalTest.Data.Clients.Interfaces;
 using DareTechnicalTest.Data.Dtos;
+using DareTechnicalTest.Models;
 using DareTechnicalTest.Models.Media.Video;
 using DareTechnicalTest.Services.CoreServices.Interfaces;
 using StackExchange.Profiling.Internal;
-using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
-using Umbraco.Core.Services.Implement;
 using Umbraco.Web;
 
 namespace DareTechnicalTest.Services.CoreServices
@@ -25,6 +24,42 @@ namespace DareTechnicalTest.Services.CoreServices
         {
             _youtubeApiClient = youtubeApiClient;
             _context = context;
+        }
+
+        public IList<PlaylistItem> GetPublishedPlaylistItems(IPublishedContent pageContent, string playlist)
+        {
+            var playlistItems = new List<PlaylistItem>();
+
+            if (pageContent == null || playlist.IsNullOrWhiteSpace())
+            {
+                return playlistItems;
+            }
+
+            var playlistContentInformation = GetPlaylistContentInformation(playlist);
+
+            if (playlistContentInformation.PlaylistItemsContent == null ||
+                !playlistContentInformation.PlaylistItemsContent.Any())
+            {
+                return playlistItems;
+            }
+
+            var youtubeVideoUrlBase = ConfigurationManager.AppSettings[AppSettings.YoutubeVideoUrlBase];
+            foreach (var playlistItemContent in playlistContentInformation.PlaylistItemsContent)
+            {
+                playlistItems.Add(new PlaylistItem
+                {
+                    PlaylistItemTitle =
+                        playlistItemContent.Value<string>(PropertyAliases.PlaylistItem.PlaylistItemTitle),
+                    PlaylistItemVideoUrl =
+                        playlistItemContent.Value<string>(PropertyAliases.PlaylistItem.PlaylistItemVideoUrl),
+                    PlaylistItemThumbnailUrl =
+                        playlistItemContent.Value<string>(PropertyAliases.PlaylistItem.PlaylistItemThumbnailUrl),
+                    PlaylistUploadDate =
+                        playlistItemContent.Value<DateTime>(PropertyAliases.PlaylistItem.PlaylistUploadDate)
+                });
+            }
+
+            return playlistItems.OrderByDescending(p => p.PlaylistUploadDate).ToList();
         }
 
         public IList<PlaylistItem> GetAndSavePlaylistItems(string playlist, IContentService contentService)
@@ -70,6 +105,41 @@ namespace DareTechnicalTest.Services.CoreServices
         private void SavePlaylistItems(IList<PlaylistItem> playlistContentItems, string playlist,
             IContentService contentService)
         {
+            var playlistContentInformation = GetPlaylistContentInformation(playlist);
+            if (playlistContentInformation.PlaylistItemsContent == null
+                || !playlistContentInformation.PlaylistItemsContent.Any()
+                || playlistContentInformation.PlaylistId <= default(int))
+            {
+                return;
+            }
+
+            foreach (var currentPlaylistItem in playlistContentInformation.PlaylistItemsContent)
+            {
+                var currentPlaylistItemContent = contentService.GetById(currentPlaylistItem.Id);
+                contentService.Delete(currentPlaylistItemContent);
+            }
+
+            foreach (var playlistContentItem in playlistContentItems)
+            {
+                var content = contentService.Create(playlistContentItem.PlaylistItemTitle,
+                    playlistContentInformation.PlaylistId,
+                    DocumentTypes.PlaylistItem);
+                content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemTitle,
+                    playlistContentItem.PlaylistItemTitle);
+                content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemThumbnailUrl,
+                    playlistContentItem.PlaylistItemThumbnailUrl);
+                content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemVideoUrl,
+                    playlistContentItem.PlaylistItemVideoUrl);
+                content.SetValue(PropertyAliases.PlaylistItem.PlaylistUploadDate,
+                    playlistContentItem.PlaylistUploadDate);
+                contentService.SaveAndPublish(content);
+            }
+        }
+
+        private PlaylistInformation GetPlaylistContentInformation(string playlist)
+        {
+            var playlistInformation = new PlaylistInformation();
+
             using (var cref = _context.EnsureUmbracoContext())
             {
                 var cache = cref.UmbracoContext.Content;
@@ -82,33 +152,11 @@ namespace DareTechnicalTest.Services.CoreServices
                     videoRoot?.Children.FirstOrDefault(v =>
                         v.IsDocumentType(DocumentTypes.Playlist) && v.Name.Equals(playlist));
 
-                if (targetPlaylist == null)
-                {
-                    return;
-                }
+                playlistInformation.PlaylistItemsContent =
+                    targetPlaylist?.Children.Where(c => c.IsDocumentType(DocumentTypes.PlaylistItem));
+                playlistInformation.PlaylistId = targetPlaylist?.Id ?? 0;
 
-                var currentPlaylistItems = targetPlaylist.Children(t => t.IsDocumentType(DocumentTypes.PlaylistItem));
-
-                foreach (var currentPlaylistItem in currentPlaylistItems)
-                {
-                    var currentPlaylistItemContent = contentService.GetById(currentPlaylistItem.Id);
-                    contentService.Delete(currentPlaylistItemContent);
-                }
-
-                foreach (var playlistContentItem in playlistContentItems)
-                {
-                    var content = contentService.Create(playlistContentItem.PlaylistItemTitle, targetPlaylist.Id,
-                        DocumentTypes.PlaylistItem);
-                    content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemTitle,
-                        playlistContentItem.PlaylistItemTitle);
-                    content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemThumbnailUrl,
-                        playlistContentItem.PlaylistItemThumbnailUrl);
-                    content.SetValue(PropertyAliases.PlaylistItem.PlaylistItemVideoUrl,
-                        playlistContentItem.PlaylistItemVideoUrl);
-                    content.SetValue(PropertyAliases.PlaylistItem.PlaylistUploadDate,
-                        playlistContentItem.PlaylistUploadDate);
-                    contentService.SaveAndPublish(content);
-                }
+                return playlistInformation;
             }
         }
 

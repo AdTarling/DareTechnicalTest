@@ -20,7 +20,6 @@ namespace DareTechnicalTest.Controllers.Surface
         public ActionResult SaveAndReturnPlaylistItems(string playlist)
         {
             var playListItems = _playlistItemService.GetAndSavePlaylistItems(playlist, _contentService);
-
             return PartialView("_playlistItems", playListItems);
         }
     }

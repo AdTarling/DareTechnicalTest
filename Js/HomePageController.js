@@ -1,6 +1,8 @@
 ﻿(function (homePageController, $, undefined) {
     homePageController.initialize = function (options) {
         this.playlist = options.playlist;
+        this.playlistItemCount = options.playlistItemCount;
+        this.spinnerHtml = options.spinnerHtml;
 
         this.homepageContainer = $(".homepage-container");
         this.refreshPlaylistButton = $(this.homepageContainer).find(".refresh-video-list-btn");
@@ -9,12 +11,14 @@
 
         this.registerRefreshButtonClick();
 
-        //initial list to retrieve
-        homePageController.getYoutubePlaylistAndSave();
+        if (this.playlistItemCount === '0') {
+            homePageController.getYoutubePlaylistAndSave();
+        }
     }
 
     homePageController.registerRefreshButtonClick = function() {
         this.refreshPlaylistButton.click(function () {
+            $(homePageController.playlistContainer).html(homePageController.spinnerHtml);
             homePageController.getYoutubePlaylistAndSave();
         });
     }

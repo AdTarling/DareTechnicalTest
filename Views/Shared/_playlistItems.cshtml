@@ -10,11 +10,19 @@
 @foreach (var playlistItem in Model)
 {
     <div class="row">
-        <div class="col-md-4"><img src="@playlistItem.PlaylistItemThumbnailUrl"/></div>
-        <div class="col-md-8">
-            <div class="col-md-4"><strong>@playlistItem.PlaylistItemTitle</strong></div>
-            <div class="col-md-4"><a href="@playlistItem.PlaylistItemVideoUrl" target="_blank">@playlistItem.PlaylistItemVideoUrl</a></div>
-            <div class="col-md-4">@playlistItem.PlaylistUploadDate.ToString("dd MMM yyyy")</div>
+        <div class="col-md-12">
+            <strong>@playlistItem.PlaylistItemTitle</strong>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="@playlistItem.PlaylistItemThumbnailUrl" />
+                </div>
+                <div class="col-md-4">
+                    <a href="@playlistItem.PlaylistItemVideoUrl" target="_blank">@playlistItem.PlaylistItemVideoUrl</a>
+                </div>
+                <div class="col-md-4">
+                    @playlistItem.PlaylistUploadDate.ToString("dd MMM yyyy")
+                </div>
+            </div>
         </div>
     </div>
     <hr/>

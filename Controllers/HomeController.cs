@@ -16,7 +16,7 @@ namespace DareTechnicalTest.Controllers
         public ActionResult Index(ContentModel model, string playlist)
         {
             var viewModel = _homePageService.GetViewModel(model.Content, playlist);
-            return base.BaseIndex(viewModel);
+            return BaseIndex(viewModel);
         }
     }
 }
